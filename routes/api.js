@@ -3,7 +3,7 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const { body } = require('express-validator');
 
-// ইনপুট ভ্যালিডেশন রুলস
+// Input validation rules
 const validateProduct = [
     body('ProductName').notEmpty().withMessage('Name is required').trim(),
     body('ProductCode').notEmpty().withMessage('Code is required'),
@@ -12,7 +12,7 @@ const validateProduct = [
     body('Img').isURL().withMessage('Valid image URL is required')
 ];
 
-// ১. Read (All & Single)
+// 1. Read (All & Single)
 router.get('/ReadProduct', productController.readProduct);
 router.get('/ReadProduct/:id', productController.readProductByID);
 

@@ -3,22 +3,22 @@ const path = require('path');
 const { validationResult } = require('express-validator');
 const filePath = path.join(__dirname, '../products.json');
 
-// ডাটা পড়ার হেল্পার ফাংশন
+// Helper function for reading data
 const readData = () => {
     try {
         return JSON.parse(fs.readFileSync(filePath, 'utf8'));
     } catch (e) { return []; }
 };
 
-// ডাটা সেভ করার হেল্পার ফাংশন
+// Helper function to save data
 const writeData = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
-// ১. সব প্রোডাক্ট দেখা
+// 1. View all products
 exports.readProduct = (req, res) => {
     res.json({ status: "success", data: readData() });
 };
 
-// ২. আইডি দিয়ে একটি প্রোডাক্ট দেখা
+// 2. View a product by ID
 exports.readProductByID = (req, res) => {
     const id = parseInt(req.params.id);
     const products = readData();
@@ -30,7 +30,7 @@ exports.readProductByID = (req, res) => {
     }
 };
 
-// ৩. প্রোডাক্ট সার্চ করা (নাম বা কোড দিয়ে)
+// 3. Search for products (by name or code)
 exports.searchProduct = (req, res) => {
     const { keyword } = req.query;
     if (!keyword) return res.status(400).json({ status: "fail", message: "Keyword is required" });
@@ -43,7 +43,7 @@ exports.searchProduct = (req, res) => {
     res.json({ status: "success", count: result.length, data: result });
 };
 
-// ৪. নতুন প্রোডাক্ট তৈরি (Validation & Auto-Calculation)
+// 4. Create New Product (Validation & Auto-Calculation)
 exports.createProduct = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ status: "fail", errors: errors.array() });
@@ -68,7 +68,7 @@ exports.createProduct = (req, res) => {
     res.status(201).json({ status: "success", data: newProduct });
 };
 
-// ৫. প্রোডাক্ট আপডেট করা
+// 5. Updating the product
 exports.updateProduct = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ status: "fail", errors: errors.array() });
@@ -91,7 +91,7 @@ exports.updateProduct = (req, res) => {
     }
 };
 
-// ৬. প্রোডাক্ট ডিলিট করা
+// 6. Delete product
 exports.deleteProduct = (req, res) => {
     const id = parseInt(req.params.id);
     let products = readData();
